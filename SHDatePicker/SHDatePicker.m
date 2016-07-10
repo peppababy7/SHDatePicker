@@ -221,7 +221,7 @@ static NSInteger const kDefaultMinuteInterval = 5;
             [hoursArray addObject:[NSString stringWithFormat:@"%dh",i]];
         }
         for (int i = 0; i < 60 / self.defaultMinuteInterval; i++) {
-            [minutesArray addObject:[NSString stringWithFormat:@"%ldmin",i * self.defaultMinuteInterval]];
+            [minutesArray addObject:[NSString stringWithFormat:@"%dmin", i * (int)self.defaultMinuteInterval]];
         }
         self.fullDateSource = [NSMutableArray arrayWithObjects:daysArray, hoursArray, minutesArray, nil];
         self.showDateSource = [self.fullDateSource mutableCopy];
