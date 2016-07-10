@@ -1,0 +1,19 @@
+PODS:
+  - Masonry (0.6.4)
+  - SHDatePicker (0.1.0):
+    - Masonry (~> 0.6.4)
+
+DEPENDENCIES:
+  - SHDatePicker (from `../`)
+
+EXTERNAL SOURCES:
+  SHDatePicker:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
+  SHDatePicker: f7a12269c68a40534b93c84d772831e07b720255
+
+PODFILE CHECKSUM: 3d435aea0917de8e5f3b4ba7a7020082d80cde35
+
+COCOAPODS: 1.0.1
