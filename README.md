@@ -1,19 +1,19 @@
-# SHGuideView
+# SHDatePicker
 
-[![CI Status](http://img.shields.io/travis/@harushuu/SHGuideView.svg?style=flat)](https://travis-ci.org/@harushuu/SHGuideView)
-[![Version](https://img.shields.io/cocoapods/v/SHGuideView.svg?style=flat)](http://cocoapods.org/pods/SHGuideView)
-[![License](https://img.shields.io/cocoapods/l/SHGuideView.svg?style=flat)](http://cocoapods.org/pods/SHGuideView)
-[![Platform](https://img.shields.io/cocoapods/p/SHGuideView.svg?style=flat)](http://cocoapods.org/pods/SHGuideView)
+[![CI Status](http://img.shields.io/travis/@harushuu/SHDatePicker.svg?style=flat)](https://travis-ci.org/@harushuu/SHDatePicker)
+[![Version](https://img.shields.io/cocoapods/v/SHDatePicker.svg?style=flat)](http://cocoapods.org/pods/SHDatePicker)
+[![License](https://img.shields.io/cocoapods/l/SHDatePicker.svg?style=flat)](http://cocoapods.org/pods/SHDatePicker)
+[![Platform](https://img.shields.io/cocoapods/p/SHDatePicker.svg?style=flat)](http://cocoapods.org/pods/SHDatePicker)
 
 ## Screenshots
-![image](https://github.com/harushuu/SHGuideView/raw/master/Screenshots.gif)
+![image](https://github.com/harushuu/SHDatePicker/raw/master/Screenshots.gif)
 
 ## Installation
 
 With [CocoaPods](http://cocoapods.org/), add this line to your `Podfile`.
 
 ```
-pod 'SHGuideView'
+pod 'SHDatePicker'
 ```
 
 and run `pod install`, then you're all done!
@@ -21,47 +21,33 @@ and run `pod install`, then you're all done!
 ## How to use
 
 ```objc
-    if ([SHGuideViewController needShowGuidePage]) {
-            SHGuideViewController *guideViewController = [[SHGuideViewController alloc] initWithImageName:@"Guide" guidePage:3 completeHandle:^{
-            //code... push your view controller;
-        }];
-        self.window.rootViewController = guideViewController;
-    } else {
-        //code... push your view controller;
-    }
+    SHDatePicker *datePicker = [[SHDatePicker alloc] initWithCompleteHandle:^(NSDate *selectedDate, NSString *selectedDateString) {
+        code... 
+    }];
+    [datePicker updateHiddenStatus];
 ```
 
 ## Summary
 
-A simple guide viewController.
+A simple date picker.
+You can custom minute interval and how many days will show.
 
-Just need set imageName and page count, then implement block functionality using your code please.
+First init and calculate default datasource only need 95ms. So do not worry about performance
+DataSource only refresh after time interval 
 
-Please rename your guide image with format:
+default dayCount is 7 days;
+default minuteInterval is 5 minutes;
+default firstMinuteInterval is 5 * 60 secend;
 
-    e.g.
-    yourImageName == 'Guide'
-    yourImageTotalCount == 3
+```objc
+    - (instancetype)initWithCompleteHandle:(SHDatePickerCompleteHandle)completeHandle;
+```
 
-    your guide image with IPhone4S resolution:
-    Please rename your image with  :  'Guide_IPhone4S_1'
-    Please rename your image with  :  'Guide_IPhone4S_2'
-    Please rename your image with  :  'Guide_IPhone4S_3'
+custom
 
-    your guide image with IPhone5 resolution
-    Please rename your image with  :  'Guide_IPhone5_1'
-    Please rename your image with  :  'Guide_IPhone5_2'
-    Please rename your image with  :  'Guide_IPhone5_3'
-
-    your guide image with IPhone6 resolution
-    Please rename your image with  :  'Guide_IPhone6_1'
-    Please rename your image with  :  'Guide_IPhone6_2'
-    Please rename your image with  :  'Guide_IPhone6_3'
-
-    your guide image with IPhone6P resolution
-    Please rename your image with  :  'Guide_IPhone6P_1'
-    Please rename your image with  :  'Guide_IPhone6P_2'
-    Please rename your image with  :  'Guide_IPhone6P_3'
+```objc
+- (instancetype)initWithDefaultDayCount:(NSInteger)dayCount minuteInterval:(NSInteger)minuteInterval firstMinuteInterval:(NSInteger)firstMinuteInterval completeHandle:(SHDatePickerCompleteHandle)completeHandle;
+```
 
 ## Requirements
 
@@ -74,5 +60,5 @@ Please rename your guide image with format:
 
 ## License
 
-English: SHTabbarController is available under the MIT license, see the LICENSE file for more information.     
+English: SHDatePicker is available under the MIT license, see the LICENSE file for more information.     
 

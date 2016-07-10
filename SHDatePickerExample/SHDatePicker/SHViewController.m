@@ -26,15 +26,12 @@
     [self.view addSubview:self.selectedDateLabel];
 }
 
-
-
 - (void)pushDatePicker {
-    SHDatePicker *datePicker = [[SHDatePicker alloc] initWithCompleteHandle:^(NSDate *selectedDate, NSString *dateString) {
+    SHDatePicker *datePicker = [[SHDatePicker alloc] initWithCompleteHandle:^(NSDate *selectedDate, NSString *selectedDateString) {
         NSLog(@"selectedDate--%@",selectedDate);
-        NSLog(@"dateString--%@",dateString);
+        NSLog(@"dateString--%@",selectedDateString);
         self.selectedDateLabel.text = [NSString stringWithFormat:@"%@", selectedDate];
-        self.selectedDateStringLabel.text = dateString;
-        
+        self.selectedDateStringLabel.text = selectedDateString;
     }];
     [datePicker updateHiddenStatus];
 }

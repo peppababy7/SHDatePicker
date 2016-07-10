@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^SHDatePickerCompleteHandle)(NSDate *selectedDate, NSString *dateString);
+typedef void(^SHDatePickerCompleteHandle)(NSDate *selectedDate, NSString *selectedDateString);
 
 @interface SHDatePicker : UIView
 
