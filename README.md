@@ -35,9 +35,11 @@ You can custom minute interval and how many days will show.
 First init and calculate default datasource only need 95ms. So do not worry about performance
 DataSource only refresh after time interval 
 
-default dayCount is 7 days;
-default minuteInterval is 5 minutes;
-default firstMinuteInterval is 5 * 60 secend;
+default
+
+    default dayCount is 7 days;
+    default minuteInterval is 5 minutes;
+    default firstMinuteInterval is 5 * 60 secend;
 
 ```objc
     - (instancetype)initWithCompleteHandle:(SHDatePickerCompleteHandle)completeHandle;

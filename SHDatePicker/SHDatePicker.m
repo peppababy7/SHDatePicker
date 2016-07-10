@@ -152,6 +152,7 @@ static NSInteger const kDefaultMinuteInterval = 5;
             NSDate *zeroHourDate = [self dateRoundedDownToTime:60 * 60 * 24 withDate:self.compareDate];
             if ([self.showDateSource[0][0] isEqualToString:@"Tomorrow"]) dayCount = dayCount + 1;
             NSDate *selectedDate = [NSDate dateWithTimeInterval:dayCount * 24 * 3600 + hourCount * 3600 + minuteCount * 60 * self.defaultMinuteInterval  sinceDate:zeroHourDate];
+            selectedDate = [self getUTCTimeIntervalWithDate:selectedDate];
             self.completeHandle(selectedDate, dateString);
         }
     }
@@ -318,6 +319,13 @@ static NSInteger const kDefaultMinuteInterval = 5;
     NSTimeZone *zone = [NSTimeZone systemTimeZone];
     NSInteger interval = [zone secondsFromGMTForDate:date];
     NSDate *localeDate = [date dateByAddingTimeInterval:interval];
+    return localeDate;
+}
+
+- (NSDate *)getUTCTimeIntervalWithDate:(NSDate *)date {
+    NSTimeZone *zone = [NSTimeZone systemTimeZone];
+    NSInteger interval = [zone secondsFromGMTForDate:date];
+    NSDate *localeDate = [date dateByAddingTimeInterval:-interval];
     return localeDate;
 }
 
