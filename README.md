@@ -37,20 +37,42 @@ DataSource only refresh after time interval
 
 default
 
-    default dayCount is 7 days;
-    default minuteInterval is 5 minutes;
-    default firstMinuteInterval is 5 * 60 secend;
-
 ```objc
-    - (instancetype)initWithCompleteHandle:(SHDatePickerCompleteHandle)completeHandle;
+default dayCount is 7 days;
+default minuteInterval is 5 minutes;
+default firstMinuteInterval is 5 * 60 secend;
+
+- (instancetype)initWithCompleteHandle:(SHDatePickerCompleteHandle)completeHandle;
 ```
 
 custom
 
 ```objc
-- (instancetype)initWithDefaultDayCount:(NSInteger)dayCount minuteInterval:(NSInteger)minuteInterval firstMinuteInterval:(NSInteger)firstMinuteInterval completeHandle:(SHDatePickerCompleteHandle)completeHandle;
+- (instancetype)initWithDefaultDayCount:(NSInteger)dayCount 
+                         minuteInterval:(NSInteger)minuteInterval 
+                    firstMinuteInterval:(NSInteger)firstMinuteInterval 
+                         customLanguage:(SHDateLanguageModel *)customLanguage 
+                         completeHandle:(SHDatePickerCompleteHandle)completeHandle;
+
 ```
 
+custom your local language
+
+```objc
+@interface SHDateLanguageModel : NSObject
+
+// defualt language will same to your local language (only support english or chinese). but you can custom like yourself.
+// if your language is english or chinese, you will not need setup all property, empty property will auto fill same to your local language.
+
+@property (nonatomic, strong) NSString *today;
+@property (nonatomic, strong) NSString *tomorrow;
+@property (nonatomic, strong) NSString *hour;
+@property (nonatomic, strong) NSString *minute;
+
+@property (nonatomic, strong) NSString *done;
+@property (nonatomic, strong) NSString *cancel;
+
+```
 ## Requirements
 
 * iOS 8.0+ 

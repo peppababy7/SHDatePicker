@@ -167,7 +167,7 @@
 				ORGANIZATIONNAME = "@harushuu";
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = N46UL9D4Q6;
+						DevelopmentTeam = 66747WB244;
 					};
 				};
 			};

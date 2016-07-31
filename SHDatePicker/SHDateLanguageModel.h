@@ -1,9 +1,8 @@
 //
-//  SHBlockView.m
-//  SHDatePicker
+//  SHDateLanguageModel.h
+//  Pods
 //
-//  Created by shuu on 7/10/16.
-//  Copyright (c) 2016 @harushuu. All rights reserved.
+//  Created by shuu on 7/31/16.
 //  Copyright (c) 2016 @harushuu. All rights reserved.
 //
 // The MIT License (MIT)
@@ -28,42 +27,25 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-#import "SHBlockView.h"
-#import <Masonry/Masonry.h>
+#import <Foundation/Foundation.h>
 
-@implementation SHBlockView
+@interface SHDateLanguageModel : NSObject
 
-# pragma mark - initialization
+// defualt language will same to your local language (only support english or chinese). but you can custom like yourself.
+// if your language is english or chinese, you will not need setup all property, empty property will auto fill same to your local language.
 
-+ (SHBlockView *)sharedView {
-    static SHBlockView *sharedView = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedView = [[[self class] alloc] init];
-    });
-    return sharedView;
-}
+@property (nonatomic, strong) NSString *today;
+@property (nonatomic, strong) NSString *tomorrow;
+@property (nonatomic, strong) NSString *hour;
+@property (nonatomic, strong) NSString *minute;
 
-- (instancetype)init {
-    if (self = [super init]) {
-        self.backgroundColor = [UIColor darkGrayColor];
-        self.alpha = 0.6;
-        self.hidden = YES;
-        UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-        [window addSubview:self];
-        [self mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(window);
-        }];
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGeatureHandle)];
-        [self addGestureRecognizer:tap];
-    }
-    return self;
-}
+@property (nonatomic, strong) NSString *done;
+@property (nonatomic, strong) NSString *cancel;
 
-# pragma mark - private API
++ (SHDateLanguageModel *)currentLocationLanguage;
 
-- (void)tapGeatureHandle {
-    if (self.willDismissBlockView) self.willDismissBlockView();
-}
++ (SHDateLanguageModel *)updateWithDataSource:(SHDateLanguageModel *)dataSource;
+
++ (NSLocale *)currentLocale;
 
 @end

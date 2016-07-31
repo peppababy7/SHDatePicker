@@ -5,6 +5,27 @@
 //  Created by shuu on 7/10/16.
 //  Copyright (c) 2016 @harushuu. All rights reserved.
 //
+// The MIT License (MIT)
+//
+// Copyright (c) 2016 @harushuu
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to
+// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+// the Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+// IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 
 #import "SHDatePicker.h"
 #import "SHBlockView.h"
@@ -31,6 +52,8 @@ static NSInteger const kDefaultMinuteInterval = 5;
 @property (nonatomic, assign) NSInteger defaultMinuteInterval;
 @property (nonatomic, assign) NSInteger firstMinuteInterval;
 @property (nonatomic, copy) SHDatePickerCompleteHandle completeHandle;
+@property (nonatomic, strong) SHDateLanguageModel *languageModel;
+
 @end
 
 @implementation SHDatePicker
@@ -46,6 +69,7 @@ static NSInteger const kDefaultMinuteInterval = 5;
         self.defaultMinuteInterval = kDefaultMinuteInterval;
         self.firstMinuteInterval = self.defaultMinuteInterval * 60;
         self.backgroundColor = [UIColor whiteColor];
+        self.languageModel = [SHDateLanguageModel currentLocationLanguage];
         [self updateDatePickerDataSource];
         [self setupViews];
         self.hidden = YES;
@@ -63,11 +87,12 @@ static NSInteger const kDefaultMinuteInterval = 5;
     return self;
 }
 
-- (instancetype)initWithDefaultDayCount:(NSInteger)dayCount minuteInterval:(NSInteger)minuteInterval firstMinuteInterval:(NSInteger)firstMinuteInterval completeHandle:(SHDatePickerCompleteHandle)completeHandle {
+- (instancetype)initWithDefaultDayCount:(NSInteger)dayCount minuteInterval:(NSInteger)minuteInterval firstMinuteInterval:(NSInteger)firstMinuteInterval customLanguage:(SHDateLanguageModel *)customLanguage completeHandle:(SHDatePickerCompleteHandle)completeHandle {
     if (self = [super init]) {
         if (completeHandle) {
             self.completeHandle = completeHandle;
         }
+        self.languageModel = [SHDateLanguageModel updateWithDataSource:customLanguage];
         self.defaultDayCount = dayCount ? : kDefaultDayCount;
         self.defaultMinuteInterval = minuteInterval ? : kDefaultMinuteInterval;
         self.firstMinuteInterval = firstMinuteInterval ? : self.defaultMinuteInterval * 60;
@@ -138,8 +163,8 @@ static NSInteger const kDefaultMinuteInterval = 5;
             NSString *dayString = self.showDateSource[0][dayCount];
             NSString *hourString = self.showDateSource[1][hourCount];
             NSString *minuteString = self.showDateSource[2][minuteCount];
-            hourString = [hourString substringWithRange:NSMakeRange(0, hourString.length - 1)];
-            minuteString = [minuteString substringWithRange:NSMakeRange(0, minuteString.length - 3)];
+            hourString = [hourString substringWithRange:NSMakeRange(0, hourString.length - self.languageModel.hour.length)];
+            minuteString = [minuteString substringWithRange:NSMakeRange(0, minuteString.length - self.languageModel.minute.length)];
             if (hourString.length == 1) hourString = [@"0" stringByAppendingString:hourString];
             if (minuteString.length == 1) minuteString = [@"0" stringByAppendingString:minuteString];
             NSString *dateString = [NSString stringWithFormat:@"%@ %@:%@",dayString, hourString, minuteString];
@@ -150,7 +175,7 @@ static NSInteger const kDefaultMinuteInterval = 5;
                 hourCount = 24 - [self.showDateSource[1] count] + hourCount;
             }
             NSDate *zeroHourDate = [self dateRoundedDownToTime:60 * 60 * 24 withDate:self.compareDate];
-            if ([self.showDateSource[0][0] isEqualToString:@"Tomorrow"]) dayCount = dayCount + 1;
+            if ([self.showDateSource[0][0] isEqualToString:self.languageModel.tomorrow]) dayCount = dayCount + 1;
             NSDate *selectedDate = [NSDate dateWithTimeInterval:dayCount * 24 * 3600 + hourCount * 3600 + minuteCount * 60 * self.defaultMinuteInterval  sinceDate:zeroHourDate];
             selectedDate = [self getUTCTimeIntervalWithDate:selectedDate];
             self.completeHandle(selectedDate, dateString);
@@ -218,10 +243,10 @@ static NSInteger const kDefaultMinuteInterval = 5;
         NSMutableArray *minutesArray = [NSMutableArray arrayWithCapacity:60 / self.defaultMinuteInterval];
         daysArray = [self getDayArray];
         for (int i = 0; i < 24; i++) {
-            [hoursArray addObject:[NSString stringWithFormat:@"%dh",i]];
+            [hoursArray addObject:[NSString stringWithFormat:@"%d%@", i ,self.languageModel.hour]];
         }
         for (int i = 0; i < 60 / self.defaultMinuteInterval; i++) {
-            [minutesArray addObject:[NSString stringWithFormat:@"%dmin", i * (int)self.defaultMinuteInterval]];
+            [minutesArray addObject:[NSString stringWithFormat:@"%d%@", i * (int)self.defaultMinuteInterval, self.languageModel.minute]];
         }
         self.fullDateSource = [NSMutableArray arrayWithObjects:daysArray, hoursArray, minutesArray, nil];
         self.showDateSource = [self.fullDateSource mutableCopy];
@@ -284,12 +309,12 @@ static NSInteger const kDefaultMinuteInterval = 5;
     NSMutableArray *daysArray = [NSMutableArray arrayWithCapacity:self.defaultDayCount];
     for (int i = 0; i < self.defaultDayCount + 1; i++) {
         if (!i) {
-            [daysArray addObject:@"Today"];
+            [daysArray addObject:self.languageModel.today];
         } else if (i == 1) {
-            [daysArray addObject:@"Tomorrow"];
+            [daysArray addObject:self.languageModel.tomorrow];
         } else {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            formatter.locale = [NSLocale systemLocale];
+            formatter.locale = [SHDateLanguageModel currentLocale];
             [formatter setDateFormat:@"M-d EEE"];
             [daysArray addObject:[formatter stringFromDate:[NSDate dateWithTimeInterval:(NSTimeInterval)i * 60 * 60 * 24 sinceDate:[self dateRoundedDownToTime:60 * 60 * 24 withDate:self.compareDate]]]];
         }
@@ -419,7 +444,7 @@ static NSInteger const kDefaultMinuteInterval = 5;
 - (UIButton *)cancelButton {
     if (!_cancelButton) {
         _cancelButton = [[UIButton alloc] init];
-        [_cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+        [_cancelButton setTitle:self.languageModel.cancel forState:UIControlStateNormal];
         [_cancelButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         _cancelButton.titleLabel.font = [UIFont systemFontOfSize:12.f];
         _cancelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
@@ -432,7 +457,7 @@ static NSInteger const kDefaultMinuteInterval = 5;
 - (UIButton *)doneButton {
     if (!_doneButton) {
         _doneButton = [[UIButton alloc] init];
-        [_doneButton setTitle:@"Done" forState:UIControlStateNormal];
+        [_doneButton setTitle:self.languageModel.done forState:UIControlStateNormal];
         [_doneButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         _doneButton.titleLabel.font = [UIFont systemFontOfSize:12.f];
         _doneButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;

@@ -1,6 +1,6 @@
 PODS:
   - Masonry (0.6.4)
-  - SHDatePicker (0.1.0):
+  - SHDatePicker (0.1.1):
     - Masonry (~> 0.6.4)
 
 DEPENDENCIES:
@@ -12,7 +12,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
-  SHDatePicker: f7a12269c68a40534b93c84d772831e07b720255
+  SHDatePicker: 25fd75f4de366474ba13719b6fcf1b8faa07580a
 
 PODFILE CHECKSUM: 3d435aea0917de8e5f3b4ba7a7020082d80cde35
 
