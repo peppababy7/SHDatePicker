@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
 s.name             = 'SHDatePicker'
-s.version          = '0.1.1'
+s.version          = '0.1.2'
 s.summary          = 'A simple custom DatePicker.'
 s.homepage         = 'https://github.com/harushuu/SHDatePicker'
 s.screenshots      = 'https://github.com/harushuu/SHDatePicker/raw/master/Screenshots.gif'
