@@ -38,8 +38,6 @@
 }
 
 + (SHDateLanguageModel *)currentLocationLanguage {
-    NSArray *languages = [NSLocale preferredLanguages];
-    NSString *currentLanguage = [languages objectAtIndex:0];
     SHDateLanguageModel *languageModel = [[SHDateLanguageModel alloc] init];
     BOOL isEnglish = ![SHDateLanguageModel currentLanguagesIsChinses];
     languageModel.today = isEnglish ? @"today" : @"今天";
